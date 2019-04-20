@@ -17,9 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Cube.FileSystem.SevenZip.Mixin
 {
@@ -116,29 +114,6 @@ namespace Cube.FileSystem.SevenZip.Mixin
         #endregion
 
         #region Internals
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Terminate
-        ///
-        /// <summary>
-        /// Invokes post processing and throws an exception if needed.
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        internal static void Terminate(this IEnumerable<ArchiveItem> src,
-            ArchiveExtractCallback cb, PasswordQuery query)
-        {
-            if (cb.Result == OperationResult.OK) return;
-            if (cb.Result == OperationResult.UserCancel) throw new OperationCanceledException();
-            if (cb.Result == OperationResult.WrongPassword ||
-                cb.Result == OperationResult.DataError && src.Any(x => x.Encrypted))
-            {
-                query.Reset();
-                throw new EncryptionException();
-            }
-            throw cb.Exception ?? new System.IO.IOException($"{cb.Result}");
-        }
 
         /* ----------------------------------------------------------------- */
         ///

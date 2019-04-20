@@ -44,13 +44,12 @@ namespace Cube.FileSystem.SevenZip
         /// specified arguments.
         /// </summary>
         ///
-        /// <param name="src">Path of the archive.</param>
         /// <param name="index">Index of the archive.</param>
         /// <param name="controller">Controller object.</param>
         ///
         /* ----------------------------------------------------------------- */
-        internal ArchiveItem(string src, int index, ArchiveItemController controller) :
-            base(src, controller, index) { }
+        internal ArchiveItem(ArchiveReaderController controller, int index) :
+            base(controller.Source, controller, index) { }
 
         #endregion
 
@@ -124,7 +123,8 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>true for match.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public bool Match(IEnumerable<string> names) => Controllable.ToAi().Filter.MatchAny(names);
+        public bool Match(IEnumerable<string> names) =>
+            names != null && Controllable.ToAi().Filter.MatchAny(names);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -152,7 +152,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(string directory, IProgress<Report> progress) =>
-            ((ArchiveItemController)Controller).Extract(this, directory, false, progress);
+            ((ArchiveReaderController)Controller).Extract(Index, directory, false, progress);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -177,7 +177,7 @@ namespace Cube.FileSystem.SevenZip
         ///
         /* ----------------------------------------------------------------- */
         public void Extract(IProgress<Report> progress) =>
-            ((ArchiveItemController)Controller).Extract(this, null, true, progress);
+            ((ArchiveReaderController)Controller).Extract(Index, string.Empty, true, progress);
 
         #endregion
     }
