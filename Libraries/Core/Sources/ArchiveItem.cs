@@ -31,7 +31,7 @@ namespace Cube.FileSystem.SevenZip
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    public class ArchiveItem : Information
+    public class ArchiveItem : Entity
     {
         #region Constructors
 

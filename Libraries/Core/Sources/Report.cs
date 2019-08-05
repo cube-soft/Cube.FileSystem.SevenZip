@@ -51,7 +51,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public Information Current { get; set; }
+        public Entity Current { get; set; }
 
         /* ----------------------------------------------------------------- */
         ///

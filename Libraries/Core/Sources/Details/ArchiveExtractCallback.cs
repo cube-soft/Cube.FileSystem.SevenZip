@@ -17,8 +17,8 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.FileSystem.SevenZip.Mixin;
-using Cube.Generics;
-using Cube.Log;
+using Cube.Mixin.Logging;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +78,7 @@ namespace Cube.FileSystem.SevenZip
             _controller = controller;
             _dest       = dest;
             _indices    = indices.GetEnumerator();
-            _indices.MoveNext();
+            _           = _indices.MoveNext();
 
             Report.TotalCount = count;
             Report.TotalBytes = -1;

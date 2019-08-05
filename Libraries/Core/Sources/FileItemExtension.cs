@@ -45,8 +45,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Converted result.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static FileItem ToFileItem(this Information src) =>
-            new FileItem(src);
+        public static FileItem ToFileItem(this Entity src) => new FileItem(src);
 
         /* ----------------------------------------------------------------- */
         ///
@@ -63,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// <returns>Converted result.</returns>
         ///
         /* ----------------------------------------------------------------- */
-        public static FileItem ToFileItem(this Information src, string pathInArchive) =>
+        public static FileItem ToFileItem(this Entity src, string pathInArchive) =>
             new FileItem(src, pathInArchive);
 
         #endregion

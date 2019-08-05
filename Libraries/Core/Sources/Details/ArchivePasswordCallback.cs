@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.Generics;
+using Cube.Mixin.String;
 using System.Diagnostics;
 
 namespace Cube.FileSystem.SevenZip
@@ -26,8 +26,8 @@ namespace Cube.FileSystem.SevenZip
     /// ArchivePasswordCallback
     ///
     /// <summary>
-    /// 展開時にパスワードを問い合わせる際のコールバック関数群を定義した
-    /// クラスです。
+    /// Provides functionality to query the password when extracting
+    /// archive files.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
@@ -40,11 +40,12 @@ namespace Cube.FileSystem.SevenZip
         /// ArchivePasswordCallback
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the ArchivePasswordCallback class
+        /// with the specified arguments.
         /// </summary>
         ///
-        /// <param name="src">圧縮ファイルのパス</param>
-        /// <param name="io">入出力用のオブジェクト</param>
+        /// <param name="src">Path of the archive file.</param>
+        /// <param name="io">I/O handler.</param>
         ///
         /* ----------------------------------------------------------------- */
         protected ArchivePasswordCallback(string src, IO io) : base(io)
@@ -61,7 +62,7 @@ namespace Cube.FileSystem.SevenZip
         /// Source
         ///
         /// <summary>
-        /// 圧縮ファイルのパスを取得します。
+        /// Gets the path of the archive file.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -76,10 +77,10 @@ namespace Cube.FileSystem.SevenZip
         /// CryptoGetTextPassword
         ///
         /// <summary>
-        /// 圧縮ファイルのパスワードを取得します。
+        /// Gets the password of the provided archive.
         /// </summary>
         ///
-        /// <param name="password">パスワード</param>
+        /// <param name="password">Password result.</param>
         ///
         /// <returns>OperationResult</returns>
         ///
@@ -88,14 +89,14 @@ namespace Cube.FileSystem.SevenZip
         {
             Debug.Assert(Password != null);
 
-            var e = QueryEventArgs.Create(Source);
+            var e = Query.NewMessage(Source);
             Password.Request(e);
 
-            var ok = !e.Cancel && e.Result.HasValue();
+            var ok = !e.Cancel && e.Value.HasValue();
             Result = e.Cancel ? OperationResult.UserCancel :
                      ok       ? OperationResult.OK :
                                 OperationResult.WrongPassword;
-            password = ok ? e.Result : string.Empty;
+            password = ok ? e.Value : string.Empty;
 
             return (int)Result;
         }

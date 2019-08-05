@@ -16,11 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Assembly;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Cube.FileSystem.SevenZip
@@ -49,8 +49,8 @@ namespace Cube.FileSystem.SevenZip
         /* ----------------------------------------------------------------- */
         public SevenZipLibrary()
         {
-            var asm = Assembly.GetExecutingAssembly().GetReader();
-            var dir = Path.GetDirectoryName(asm.Location);
+            var asm = GetType().Assembly;
+            var dir = asm.GetDirectoryName();
             _handle = Kernel32.NativeMethods.LoadLibrary(Path.Combine(dir, "7z.dll"));
             if (_handle.IsInvalid) throw new Win32Exception("LoadLibrary");
         }

@@ -17,7 +17,7 @@
 //
 /* ------------------------------------------------------------------------- */
 using Cube.Collections;
-using Cube.Generics;
+using Cube.Mixin.String;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -327,7 +327,7 @@ namespace Cube.FileSystem.SevenZip
                 }
                 else IO.Move(tmp, dest, true);
             }
-            finally { IO.TryDelete(dir); }
+            finally { _ = IO.TryDelete(dir); }
         }
 
         /* ----------------------------------------------------------------- */
@@ -388,9 +388,9 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private string GetTarName(Information src)
+        private string GetTarName(Entity src)
         {
-            var name = src.NameWithoutExtension;
+            var name = src.BaseName;
             var cmp  = StringComparison.InvariantCultureIgnoreCase;
             return name.EndsWith(".tar", cmp) ? name : $"{name}.tar";
         }
@@ -417,7 +417,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private void AddItem(Information src, string name)
+        private void AddItem(Entity src, string name)
         {
             if (CanRead(src)) Items.Add(src.ToFileItem(name));
             if (!src.IsDirectory) return;
@@ -439,7 +439,7 @@ namespace Cube.FileSystem.SevenZip
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        private bool CanRead(Information src)
+        private bool CanRead(Entity src)
         {
             if (src.IsDirectory) return true;
             using (var stream = IO.OpenRead(src.FullName)) return stream != null;
