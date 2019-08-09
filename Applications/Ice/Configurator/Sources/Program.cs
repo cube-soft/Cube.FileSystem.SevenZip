@@ -56,7 +56,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var model = new SettingsFolder(asm, new AfsIO());
+                var model = new SettingFolder(asm, new AfsIO());
                 model.Load();
 
                 var install = args.Length > 0 && args[0] == "/install";
@@ -66,7 +66,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Configurator
                 vm.Associate.Changed = install;
                 if (!install) vm.Sync();
 
-                var view = new MainForm(install);
+                var view = new MainWindow(install);
                 view.Bind(vm);
 
                 Application.Run(view);

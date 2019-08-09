@@ -53,7 +53,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
                 Logger.Info(type, string.Join(" ", args));
 
                 var asm      = Assembly.GetExecutingAssembly();
-                var settings = new SettingsFolder(asm, new AfsIO());
+                var settings = new SettingFolder(asm, new AfsIO());
                 if (args.Length > 0 && args[0].ToLowerInvariant() == "/uninstall") Clear(settings);
                 else settings.Load();
 
@@ -96,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Associator
         /// </remarks>
         ///
         /* ----------------------------------------------------------------- */
-        static void Clear(SettingsFolder settings)
+        static void Clear(SettingFolder settings)
         {
             foreach (var key in settings.Value.Associate.Value.Keys.ToArray())
             {
