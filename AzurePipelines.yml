@@ -113,7 +113,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     archiveFile: '$(Build.ArtifactStagingDirectory)\CubeIce.Settings.zip'
-    rootFolderOrFile: 'Applications\Ice\Configurator\$(PROJECT_BIN)'
+    rootFolderOrFile: 'Applications\Ice\Settings\$(PROJECT_BIN)'
     includeRootFolder: false
     archiveType: 'zip'
     replaceExistingArchive: true

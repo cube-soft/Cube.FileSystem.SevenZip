@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.FileSystem.SevenZip.Ic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.FileSystem.SevenZip.Ice.Associator", "Applications\Ice\Associator\Cube.FileSystem.SevenZip.Ice.Associator.csproj", "{DC0D85B9-13D1-49BB-B462-AD66287D3181}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.FileSystem.SevenZip.Ice.Configurator", "Applications\Ice\Configurator\Cube.FileSystem.SevenZip.Ice.Configurator.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.FileSystem.SevenZip.Ice.Settings", "Applications\Ice\Settings\Cube.FileSystem.SevenZip.Ice.Settings.csproj", "{42B72A9A-C752-4D99-97D0-D341F1BD2A45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cube.FileSystem.SevenZip.Ice.Tests", "Applications\Ice\Tests\Cube.FileSystem.SevenZip.Ice.Tests.csproj", "{7CBF700C-6F9D-49B5-A905-E5C37302DA93}"
 EndProject
