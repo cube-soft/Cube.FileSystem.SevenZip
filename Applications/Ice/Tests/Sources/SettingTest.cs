@@ -15,7 +15,8 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
+using Cube.FileSystem.SevenZip.Ice.Settings;
+using Cube.Tests;
 using NUnit.Framework;
 using System;
 using System.Reflection;
@@ -24,22 +25,22 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsTest
+    /// SettingTest
     ///
     /// <summary>
-    /// 各種 Settings のテスト用クラスです。
+    /// Tests SettingFolder and related classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsTest : FileFixture
+    class SettingTest : FileFixture
     {
         /* ----------------------------------------------------------------- */
         ///
         /// Create
         ///
         /// <summary>
-        /// Settings クラスの初期値を確認します。
+        /// Tests the constructor and confirms properties.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -47,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         public void Create()
         {
             var asm  = Assembly.GetExecutingAssembly();
-            var dest = new SettingsFolder(asm, IO);
+            var dest = new SettingFolder(asm, IO);
             Assert.That(dest.AutoSave,           Is.False);
             Assert.That(dest.AutoSaveDelay,      Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(dest.Version.ToString(), Is.EqualTo("0.9.1β"));
@@ -58,23 +59,23 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SyncUpdate
+        /// Sync_Shortcut
         ///
         /// <summary>
-        /// ShortcutSettings の更新テストを実行します。
+        /// Tests the Sync method that loads the shorcut settings.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void SyncUpdate()
+        public void Sync_Shortcut()
         {
             var archive  = new Shortcut { FullName = Get("CubeICE 圧縮") };
             var extract  = new Shortcut { FullName = Get("CubeICE 解凍") };
             var settings = new Shortcut { FullName = Get("CubeICE 設定") };
 
-            var src  = new ShortcutSettings { Directory = Results };
-            var menu = PresetMenu.Archive |
-                       PresetMenu.ArchiveDetails |
+            var src  = new ShortcutValue { Directory = Results };
+            var menu = PresetMenu.Compress |
+                       PresetMenu.CompressOthers |
                        PresetMenu.Extract |
                        PresetMenu.Settings;
 
@@ -82,8 +83,8 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.Preset, Is.EqualTo(menu));
 
             src.Sync();
-            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),        Is.False);
-            Assert.That(src.Preset.HasFlag(PresetMenu.ArchiveDetails), Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Compress),       Is.False);
+            Assert.That(src.Preset.HasFlag(PresetMenu.CompressOthers), Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),        Is.False);
             Assert.That(src.Preset.HasFlag(PresetMenu.Settings),       Is.False);
 
@@ -95,7 +96,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.Preset = PresetMenu.None;
             src.Sync();
-            Assert.That(src.Preset.HasFlag(PresetMenu.Archive),  Is.True);
+            Assert.That(src.Preset.HasFlag(PresetMenu.Compress), Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Extract),  Is.True);
             Assert.That(src.Preset.HasFlag(PresetMenu.Settings), Is.True);
 
@@ -111,16 +112,14 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Convert_ToOption
         ///
         /// <summary>
-        /// ArchiveRtSettings を ArchiveOption オブジェクトに変換する
-        /// テストを実行します。
+        /// Tests the ToOption method.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void Convert_ToOption()
+        public void ToOption()
         {
-            var asm  = Assembly.GetExecutingAssembly();
-            var dest = new ArchiveRtSettings(IO)
+            var dest = new CompressRuntime(IO)
             {
                 CompressionLevel  = CompressionLevel.High,
                 CompressionMethod = CompressionMethod.Ppmd,
@@ -128,9 +127,9 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
                 Format            = Format.GZip,
                 Password          = "password",
                 Path              = "dummy",
-                SfxModule         = string.Empty,
+                Sfx               = string.Empty,
                 ThreadCount       = 3,
-            }.ToOption(new SettingsFolder(asm, IO));
+            }.ToOption(new SettingFolder(GetType().Assembly, IO));
 
             Assert.That(dest.CompressionLevel, Is.EqualTo(CompressionLevel.High));
             Assert.That(dest.ThreadCount,      Is.EqualTo(3));

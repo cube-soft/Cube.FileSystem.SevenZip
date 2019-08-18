@@ -15,7 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.SevenZip.Ice;
+using Cube.Tests;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -23,32 +23,33 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// PathConverterTest
+    /// ArchiveNameTest
     ///
     /// <summary>
-    /// PathConverter のテスト用クラスです。
+    /// Tests the ArchiveName class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class PathConverterTest
+    class ArchiveNameTest : FileFixture
     {
         #region Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CompressionMethod_Default
+        /// Convert_Lite
         ///
         /// <summary>
-        /// CompressionMethod の初期値を確認します。
+        /// Tests the constructor and the conversion.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [Test]
-        public void CompressionMethod_Default()
+        public void Convert_Lite()
         {
-            var cvt = new PathConverter(@"c:\foo\bar\src.txt", Format.Zip);
-            Assert.That(cvt.CompressionMethod, Is.EqualTo(CompressionMethod.Default));
+            var src = new ArchiveName(@"c:\foo\bar\src.txt", Format.Zip, IO);
+            Assert.That(src.Format, Is.EqualTo(Format.Zip));
+            Assert.That(src.Value.FullName, Is.EqualTo(@"c:\foo\bar\src.zip"));
         }
 
         /* ----------------------------------------------------------------- */
@@ -56,13 +57,13 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Convert
         ///
         /// <summary>
-        /// 変換処理のテストを実行します。
+        /// Tests the constructor and the conversion.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
         public string Convert(string src, Format format, CompressionMethod method) =>
-            new PathConverter(src, format, method).Result.FullName;
+            new ArchiveName(src, format, method).Value.FullName;
 
         #endregion
 

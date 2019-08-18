@@ -15,12 +15,11 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
+using Cube.Tests;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
@@ -40,28 +39,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* --------------------------------------------------------------------- */
         ///
-        /// Registry_Command
+        /// Command
         ///
         /// <summary>
-        /// レジストリに登録されるコマンドライン用文字列を確認します。
+        /// Tests the constructor and confirms the Command property.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
         [TestCaseSource(nameof(TestCases))]
-        public string Registry_Command(string path, IList<string> args) =>
-            new AssociateRegistrar(path)
-            {
-                Arguments    = args,
-                IconLocation = "",
-                ToolTip      = false,
-            }.Command;
+        public string Command(string path, IList<string> args) => new AssociateRegistrar(path)
+        {
+            Arguments    = args,
+            IconLocation = "",
+            ToolTip      = false,
+        }.Command;
 
         /* --------------------------------------------------------------------- */
         ///
-        /// Registry_Update_Throws
+        /// Update_Throws
         ///
         /// <summary>
-        /// Update 実行時の挙動を確認します。
+        /// Tests the Update method.
         /// </summary>
         ///
         /// <remarks>
@@ -73,12 +71,11 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         ///
         /* --------------------------------------------------------------------- */
         [Test]
-        public void Registry_Update_Throws()
+        public void Update_Throws()
         {
             try
             {
-                var asm       = Assembly.GetExecutingAssembly();
-                var settings  = new SettingsFolder(asm, IO);
+                var settings  = new SettingFolder(GetType().Assembly, IO);
                 var path      = @"C:\Program Files\CubeICE\cubeice.exe";
                 var registrar = new AssociateRegistrar(path)
                 {
@@ -97,7 +94,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
                 Assert.Pass("Administrator");
             }
-            catch (UnauthorizedAccessException err) { Assert.Pass(err.Message); }
+            catch (UnauthorizedAccessException err) { Assert.Ignore(err.Message); }
         }
 
         #endregion
@@ -109,7 +106,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// TestCases
         ///
         /// <summary>
-        /// Command のテスト用データを取得します。
+        /// Gets the test cases.
         /// </summary>
         ///
         /* --------------------------------------------------------------------- */
