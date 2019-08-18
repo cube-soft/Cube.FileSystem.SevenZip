@@ -15,6 +15,7 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
+using Cube.Mixin.Assembly;
 using Cube.Mixin.Observing;
 using System;
 using System.Threading;
@@ -23,7 +24,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// ProgressHelper
+    /// ArchiveExtension
     ///
     /// <summary>
     /// Provides extended methods of ProgressViewModel and inherited
@@ -31,7 +32,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    static class ProgressHelper
+    static class ArchiveExtension
     {
         #region Methods
 
@@ -76,14 +77,33 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public static CancellationToken GetToken<T>(this ProgressViewModel<T> src)
-            where T : ProgressFacade
+        public static CancellationToken GetToken<T>(this ArchiveViewModel<T> src)
+            where T : ArchiveFacade
         {
             var dest = new CancellationTokenSource();
             _ = src.Subscribe(e => {
                 if (e == nameof(src.State) && src.State == TimerState.Stop) dest.Cancel();
             });
             return dest.Token;
+        }
+
+        /* ----------------------------------------------------------------- */
+        ///
+        /// GetPath
+        ///
+        /// <summary>
+        /// Gets the absolute path of the specified filename.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// FileFixture.Get と同じ内容を返す静的メソッドです。
+        /// </remarks>
+        ///
+        /* ----------------------------------------------------------------- */
+        public static string GetPath(this Type src, string filename)
+        {
+            var root = src.Assembly.GetDirectoryName();
+            return new IO().Combine(root, "Results", src.FullName, filename);
         }
 
         #endregion
