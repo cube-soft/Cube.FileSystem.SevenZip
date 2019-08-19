@@ -15,49 +15,36 @@
 // limitations under the License.
 //
 /* ------------------------------------------------------------------------- */
-using Cube.FileSystem.TestService;
+using Cube.Tests;
 using Microsoft.Win32;
 using NUnit.Framework;
-using System.Reflection;
 
 namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsMockViewFixture
+    /// SettingFixture
     ///
     /// <summary>
-    /// テストで MockView を使用するためのクラスです。
+    /// Provides functionality to help the tests for SettingViewModel
+    /// and related classes.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
-    class SettingsMockViewFixture : FileFixture
+    abstract class SettingFixture : FileFixture
     {
         #region Constructors
 
         /* ----------------------------------------------------------------- */
         ///
-        /// SettingsMockViewFixture
+        /// SettingFixture
         ///
         /// <summary>
-        /// オブジェクトを初期化します。
+        /// Initializes a new instance of the SettingFixture class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        public SettingsMockViewFixture() : this(new AfsIO()) { }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// SettingsMockViewFixture
-        ///
-        /// <summary>
-        /// オブジェクトを初期化します。
-        /// </summary>
-        ///
-        /// <param name="io">ファイル操作用オブジェクト</param>
-        ///
-        /* ----------------------------------------------------------------- */
-        public SettingsMockViewFixture(IO io) : base(io) { }
+        protected SettingFixture() : base(new AfsIO()) { }
 
         #endregion
 
@@ -65,21 +52,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// Mock
-        ///
-        /// <summary>
-        /// ダミー用の ViewFactory を取得します。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        protected SettingsMockViewFactory Mock { get; private set; }
-
-        /* ----------------------------------------------------------------- */
-        ///
         /// SubKeyName
         ///
         /// <summary>
-        /// テスト用のレジストリ・サブキー名を取得します。
+        /// Gets the sub-key name for the tests.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
@@ -91,36 +67,19 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
         /* ----------------------------------------------------------------- */
         ///
-        /// CreateSettings
+        /// Create
         ///
         /// <summary>
-        /// SettingsFolder オブジェクトを生成します。
+        /// Creates a new instance of the SettingsFolder class.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */
-        protected SettingsFolder CreateSettings()
+        protected SettingFolder Create()
         {
-            var asm  = Assembly.GetExecutingAssembly();
-            var dc   = Cube.DataContract.Format.Registry;
-            var dest = new SettingsFolder(asm, dc, SubKeyName, IO) { AutoSave = false };
+            var format = Cube.DataContract.Format.Registry;
+            var dest   = new SettingFolder(GetType().Assembly, format, SubKeyName, IO) { AutoSave = false };
             Assert.That(dest.Location, Does.Not.StartsWith("Software"));
             return dest;
-        }
-
-        /* ----------------------------------------------------------------- */
-        ///
-        /// Setup
-        ///
-        /// <summary>
-        /// テスト毎に実行される SetUp 処理です。
-        /// </summary>
-        ///
-        /* ----------------------------------------------------------------- */
-        [SetUp]
-        public virtual void Setup()
-        {
-            Mock = new SettingsMockViewFactory();
-            Settings.Views.Configure(Mock);
         }
 
         /* ----------------------------------------------------------------- */
@@ -128,7 +87,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         /// Teardown
         ///
         /// <summary>
-        /// テスト毎に実行される TearDown 処理です。
+        /// Invokes after testing.
         /// </summary>
         ///
         /* ----------------------------------------------------------------- */

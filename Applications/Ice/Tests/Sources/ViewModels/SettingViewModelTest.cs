@@ -24,15 +24,15 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 {
     /* --------------------------------------------------------------------- */
     ///
-    /// SettingsViewModelTest
+    /// SettingViewModelTest
     ///
     /// <summary>
-    /// SettingsViewModel のテスト用クラスです。
+    /// Tests the SettingViewModel class.
     /// </summary>
     ///
     /* --------------------------------------------------------------------- */
     [TestFixture]
-    class SettingsViewModelTest : SettingsMockViewFixture
+    class SettingViewModelTest : SettingFixture
     {
         #region Tests
 
@@ -48,7 +48,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void GeneralSettings()
         {
-            var m = CreateSettings();
+            var m = Create();
 
             var vm = new MainViewModel(m)
             {
@@ -111,10 +111,10 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ArchiveSettings()
         {
-            var m    = CreateSettings();
+            var m    = Create();
             var vm   = new MainViewModel(m);
-            var src  = vm.Archive;
-            var dest = m.Value.Archive;
+            var src  = vm.Compress;
+            var dest = m.Value.Compress;
 
             src.SaveSource = true;
             Assert.That(src.SaveSource,    Is.True);
@@ -126,7 +126,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.True);
             Assert.That(src.SaveOthers,    Is.False);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Runtime));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
             src.SaveOthers = true;
             Assert.That(src.SaveSource,    Is.False);
@@ -161,27 +161,27 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.OpenDirectory = true;
             src.SkipDesktop = true;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.OpenNotDesktop));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.OpenNotDesktop));
 
             src.SkipDesktop = false;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.Open));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.Open));
 
             src.OpenDirectory = false;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.None));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.None));
 
             src.SkipDesktop = true;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.SkipDesktop));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.SkipDesktop));
 
-            dest.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+            dest.OpenMethod = OpenMethod.OpenNotDesktop;
             Assert.That(src.OpenDirectory, Is.True);
             Assert.That(src.SkipDesktop,   Is.True);
 
-            src.SaveDirectoryName = @"path\to\save";
-            Assert.That(dest.SaveDirectoryName, Is.EqualTo(@"path\to\save"));
-            src.SaveDirectoryName = string.Empty;
-            Assert.That(dest.SaveDirectoryName, Is.Empty);
-            dest.SaveDirectoryName = @"path\to\new";
-            Assert.That(src.SaveDirectoryName, Is.EqualTo(@"path\to\new"));
+            src.SaveDirectory = @"path\to\save";
+            Assert.That(dest.SaveDirectory, Is.EqualTo(@"path\to\save"));
+            src.SaveDirectory = string.Empty;
+            Assert.That(dest.SaveDirectory, Is.Empty);
+            dest.SaveDirectory = @"path\to\new";
+            Assert.That(src.SaveDirectory, Is.EqualTo(@"path\to\new"));
 
             src.Filtering = true;
             Assert.That(dest.Filtering, Is.True);
@@ -204,7 +204,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ExtractSettings()
         {
-            var m    = CreateSettings();
+            var m    = Create();
             var vm   = new MainViewModel(m);
             var src  = vm.Extract;
             var dest = m.Value.Extract;
@@ -219,7 +219,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             Assert.That(src.SaveSource,    Is.False);
             Assert.That(src.SaveRuntime,   Is.True);
             Assert.That(src.SaveOthers,    Is.False);
-            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Runtime));
+            Assert.That(dest.SaveLocation, Is.EqualTo(SaveLocation.Query));
 
             src.SaveOthers = true;
             Assert.That(src.SaveSource,    Is.False);
@@ -248,46 +248,46 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
 
             src.OpenDirectory = true;
             src.SkipDesktop = true;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.OpenNotDesktop));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.OpenNotDesktop));
 
             src.SkipDesktop = false;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.Open));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.Open));
 
             src.OpenDirectory = false;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.None));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.None));
 
             src.SkipDesktop = true;
-            Assert.That(dest.OpenDirectory, Is.EqualTo(OpenDirectoryMethod.SkipDesktop));
+            Assert.That(dest.OpenMethod, Is.EqualTo(OpenMethod.SkipDesktop));
 
-            dest.OpenDirectory = OpenDirectoryMethod.OpenNotDesktop;
+            dest.OpenMethod = OpenMethod.OpenNotDesktop;
             Assert.That(src.OpenDirectory, Is.True);
             Assert.That(src.SkipDesktop,   Is.True);
 
             src.CreateDirectory = true;
             src.SkipSingleDirectory = true;
-            Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.CreateSmart));
+            Assert.That(dest.SaveMethod, Is.EqualTo(SaveMethod.CreateSmart));
 
             src.SkipSingleDirectory = false;
-            Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.Create));
+            Assert.That(dest.SaveMethod, Is.EqualTo(SaveMethod.Create));
 
             src.CreateDirectory = false;
-            Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.None));
+            Assert.That(dest.SaveMethod, Is.EqualTo(SaveMethod.None));
 
             src.SkipSingleDirectory = true;
-            Assert.That(dest.RootDirectory, Is.EqualTo(CreateDirectoryMethod.SkipSingleDirectory));
+            Assert.That(dest.SaveMethod, Is.EqualTo(SaveMethod.SkipSingleDirectory));
 
-            dest.RootDirectory = CreateDirectoryMethod.Create |
-                                 CreateDirectoryMethod.SkipSingleDirectory |
-                                 CreateDirectoryMethod.SkipSingleFile;
+            dest.SaveMethod = SaveMethod.Create |
+                              SaveMethod.SkipSingleDirectory |
+                              SaveMethod.SkipSingleFile;
             Assert.That(src.CreateDirectory,     Is.True);
             Assert.That(src.SkipSingleDirectory, Is.True);
 
-            src.SaveDirectoryName = @"path\to\extract";
-            Assert.That(dest.SaveDirectoryName, Is.EqualTo(@"path\to\extract"));
-            src.SaveDirectoryName = string.Empty;
-            Assert.That(dest.SaveDirectoryName, Is.Empty);
-            dest.SaveDirectoryName = @"path\to\ex2";
-            Assert.That(src.SaveDirectoryName, Is.EqualTo(@"path\to\ex2"));
+            src.SaveDirectory = @"path\to\extract";
+            Assert.That(dest.SaveDirectory, Is.EqualTo(@"path\to\extract"));
+            src.SaveDirectory = string.Empty;
+            Assert.That(dest.SaveDirectory, Is.Empty);
+            dest.SaveDirectory = @"path\to\ex2";
+            Assert.That(src.SaveDirectory, Is.EqualTo(@"path\to\ex2"));
 
             src.DeleteSource = true;
             Assert.That(dest.DeleteSource, Is.True);
@@ -324,7 +324,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void AssociateSettings()
         {
-            var m    = CreateSettings();
+            var m    = Create();
             var vm   = new MainViewModel(m);
             var src  = vm.Associate;
             var dest = m.Value.Associate;
@@ -443,30 +443,30 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [Test]
         public void ShortcutSettings()
         {
-            var m    = CreateSettings();
+            var m    = Create();
             var vm   = new MainViewModel(m);
             var src  = vm.Shortcut;
             var dest = m.Value.Shortcut;
 
             dest.Directory = Results;
 
-            src.Archive       = true;
-            src.Extract       = true;
-            src.Settings      = true;
-            src.ArchiveOption = PresetMenu.ArchiveZip;
+            src.Compress       = true;
+            src.Extract        = true;
+            src.Settings       = true;
+            src.CompressOption = PresetMenu.CompressZip;
             Assert.That((uint)dest.Preset, Is.EqualTo(0x107));
 
             src.Sync();
-            Assert.That(src.Archive,       Is.False);
-            Assert.That(src.Extract,       Is.False);
-            Assert.That(src.Settings,      Is.False);
-            Assert.That(src.ArchiveOption, Is.EqualTo(PresetMenu.ArchiveZip));
-            Assert.That(dest.Preset,       Is.EqualTo(PresetMenu.ArchiveZip));
+            Assert.That(src.Compress,       Is.False);
+            Assert.That(src.Extract,        Is.False);
+            Assert.That(src.Settings,       Is.False);
+            Assert.That(src.CompressOption, Is.EqualTo(PresetMenu.CompressZip));
+            Assert.That(dest.Preset,        Is.EqualTo(PresetMenu.CompressZip));
 
-            src.Archive  = false;
-            src.Extract  = false;
-            src.Settings = false;
-            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.ArchiveZip));
+            src.Compress  = false;
+            src.Extract   = false;
+            src.Settings  = false;
+            Assert.That(dest.Preset, Is.EqualTo(PresetMenu.CompressZip));
         }
 
         /* ----------------------------------------------------------------- */
@@ -482,7 +482,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
         [TestCase(false)]
         public void SyncUpdate(bool install) => Assert.DoesNotThrow(() =>
         {
-            var m0 = CreateSettings();
+            var m0 = Create();
             m0.Value.Shortcut.Directory = Results;
 
             var vm0 = new MainViewModel(m0) { CheckUpdate = true };
@@ -491,7 +491,7 @@ namespace Cube.FileSystem.SevenZip.Ice.Tests
             vm0.Associate.Clear();
             vm0.Update();
 
-            var m1 = CreateSettings();
+            var m1 = Create();
             m1.Load();
             m1.Value.Shortcut.Directory = Results;
 
